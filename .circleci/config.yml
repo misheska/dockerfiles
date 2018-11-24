@@ -1,0 +1,13 @@
+version: 2
+jobs:
+  build:
+    machine: true
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+        name: Test Dockerfile changes
+        command: |
+          set -x
+          pushd awscli
+          make build
