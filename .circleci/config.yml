@@ -10,5 +10,4 @@ jobs:
           name: Test Dockerfile changes
           command: |
             set -x
-            pushd awscli
-            make build
+            make
