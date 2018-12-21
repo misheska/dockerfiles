@@ -11,4 +11,3 @@ jobs:
           command: |
             set -x
             make build
-            make assure
