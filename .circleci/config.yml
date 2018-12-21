@@ -10,4 +10,5 @@ jobs:
           name: Test Dockerfile changes
           command: |
             set -x
-            make
+            make build
+            make assure

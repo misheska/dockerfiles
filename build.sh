@@ -7,9 +7,9 @@ build() {
   image_name=$1
   build_dir=$2
 
-  printf "=> Building ${image_name} in ${build_dir}\n"
+  echo "=> Building ${image_name} in ${build_dir}"
   docker build -t "${image_name}:latest" "${build_dir}"
-  printf "=> Done building ${image_name}\n"
+  echo "=> Done building ${image_name}"
 }
 
 main() {
