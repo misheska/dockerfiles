@@ -1,11 +1,11 @@
 DOCKERFILES=$(shell find * -type f -name Dockerfile)
 IMAGES=$(subst /,\:,$(subst /Dockerfile,,$(DOCKERFILES)))
 
-.PHONY: $(IMAGES)
+# .PHONY: $(IMAGES)
 $(IMAGES): %:
 	docker build -t $@ $(subst :,/,$@)
 
-.PHONY: build 
+# .PHONY: build 
 build: $(IMAGES)
 
 .PHONY: assure
