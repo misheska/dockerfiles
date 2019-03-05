@@ -1,4 +1,4 @@
-FROM sheska/erlang-otp21
+FROM sheska/erlang-otp:21
 
 ENV ELIXIR_URL=https://github.com/elixir-lang/elixir/archive/v1.8.1.tar.gz \
     ELIXIR_SHA256="de8c636ea999392496ccd9a204ccccbc8cb7f417d948fd12692cda2bd02d9822" 
