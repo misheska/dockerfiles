@@ -1,19 +1,19 @@
 FROM alpine:3.9
 
-# Based on https://github.com/erlang/docker-erlang-otp/blob/master/21/alpine/Dockerfile
+# Based on https://github.com/erlang/docker-erlang-otp
 
-ENV OTP_URL="https://github.com/erlang/otp/archive/OTP-21.2.tar.gz" \
-    OTP_SHA256="5d2cb28232a60ce88c6478fcf5d6aa5be353555e02f3cf96ed93c9bae7522448" \
-    OTP_VERSION="21.2" \
-    REBAR3_URL="https://github.com/erlang/rebar3/archive/3.8.0.tar.gz" \
-    REBAR3_SHA256="fc4d08037d39bcc651a4a749f8a5b1a10b2205527df834c2aee8f60725c3f431"
+ENV OTP_VERSION="21.3.4" \
+    REBAR3_VERSION="3.9.1"
 
 RUN set -xe \
+	&& OTP_DOWNLOAD_URL="https://github.com/erlang/otp/archive/OTP-${OTP_VERSION}.tar.gz" \
+	&& OTP_DOWNLOAD_SHA256="1af7c01e80d04423c14449fcb7c5f3b11e0375fe42d01b088ccef4cbcb733c3a" \
+	&& REBAR3_DOWNLOAD_SHA256="b7330a67a8cb5d6fb3b53a3246208b7c2b248546bcf62ef71a9a27b1d541c2d8" \
 	&& apk add --no-cache --virtual .fetch-deps \
 		curl \
 		ca-certificates \
-	&& curl -fSL -o otp-src.tar.gz "${OTP_URL}" \
-	&& echo "${OTP_SHA256}  otp-src.tar.gz" | sha256sum -c - \
+	&& curl -fSL -o otp-src.tar.gz "$OTP_DOWNLOAD_URL" \
+	&& echo "$OTP_DOWNLOAD_SHA256  otp-src.tar.gz" | sha256sum -c - \
 	&& apk add --no-cache --virtual .build-deps \
 		dpkg-dev dpkg \
 		gcc \
@@ -28,8 +28,8 @@ RUN set -xe \
 		lksctp-tools-dev \
 		tar \
 	&& export ERL_TOP="/usr/src/otp_src_${OTP_VERSION%%@*}" \
-	&& mkdir -vp ${ERL_TOP} \
-	&& tar -xzf otp-src.tar.gz -C ${ERL_TOP} --strip-components=1 \
+	&& mkdir -vp $ERL_TOP \
+	&& tar -xzf otp-src.tar.gz -C $ERL_TOP --strip-components=1 \
 	&& rm otp-src.tar.gz \
 	&& ( cd $ERL_TOP \
 	  && ./otp_build autoconf \
@@ -49,8 +49,9 @@ RUN set -xe \
 			| sort -u \
 			| awk 'system("[ -e /usr/local/lib/" $1 " ]") == 0 { next } { print "so:" $1 }' \
 	)" \
-	&& curl -fSL -o rebar3-src.tar.gz "$REBAR3_URL" \
-	&& echo "${REBAR3_SHA256}  rebar3-src.tar.gz" | sha256sum -c - \
+	&& REBAR3_DOWNLOAD_URL="https://github.com/erlang/rebar3/archive/${REBAR3_VERSION}.tar.gz" \
+	&& curl -fSL -o rebar3-src.tar.gz "$REBAR3_DOWNLOAD_URL" \
+	&& echo "${REBAR3_DOWNLOAD_SHA256}  rebar3-src.tar.gz" | sha256sum -c - \
 	&& mkdir -p /usr/src/rebar3-src \
 	&& tar -xzf rebar3-src.tar.gz -C /usr/src/rebar3-src --strip-components=1 \
 	&& rm rebar3-src.tar.gz \
